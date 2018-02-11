@@ -1,14 +1,35 @@
 from spy_details import spy_name, spy_age, spy_rating,spy_salutation
 print "Hello!" #welcome msgs for user
 print 'Let\'s get started.'
+STATUS_MESSAGES = ['Cant talk spychat only','Available','Always busy','At work','in a meeting']
+def add_status (C_S_M) : #function to add status C_S_M is the variable it can bt changed
+    if C_S_M != None : #if C_S_M is not equal to none then print statement will execute
+        print "your current status is " + C_S_M
+    else: #if C_S_M is equal to none then print statement will execute
+        print "there is no current status"
+    user_choice = raw_input("Select from old status? Y or N: ")
+    if user_choice.upper() == 'Y': # if user_choice is yes then old status will be displayed via list
+        serial_no = 1
+        for old_status in STATUS_MESSAGES:
+            print str(serial_no) + "." + old_status
+            serial_no = serial_no + 1
+        user_status_selection = input('Which one do u want to select this time?')
+        new_status = STATUS_MESSAGES[user_status_selection - 1]
+    elif user_choice.upper() =='N': #if user_choiceis no then new status will be added
+        new_status = raw_input("Write your status: ")
+        STATUS_MESSAGES.append(new_status)
+    else: # when any other input is given then else statement will execute
+        print "Invalid Entry"
+
+
 def spy_chat(spy_name,spy_age,spy_rating): #function is created with name spy_chat
-    print spy_name
-    show_menu = True
-    while show_menu :
+    current_status_message = None #initally there is no current status
+    show_menu = True #menu will be displayed only when value is true
+    while show_menu : #while loop to continuiously execute menu_choice
         menu_choice = input("What would you like to do? \n 1. Add a Status \n 2.Add a Friend \n 0. Exit \n")#features which will be same for new and old user
         if menu_choice == 1:
-            status=raw_input("write a status:")#add a status
-            print status
+            updated_status_message = add_status(current_status_message)
+            print 'Your updated status is:' + updated_status_message
         elif menu_choice ==2:
             print "will add a friend"#add a friend
         elif menu_choice ==0:
