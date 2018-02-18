@@ -36,7 +36,7 @@ def  add_friend() :
     frnd['_name'] = frnd_sal+ " " + frnd['name']
     frnd['rating'] = input('write the rating of frnd: ')
 
-    if len(frnd['name'])>2 and 50>=friends['age']>=12 and friends['rating']>= spy['rating']:
+    if len(frnd['name'])>2 and 50>=frnd['age']>=12 and frnd['rating']>= spy['rating']:
         friends.append(frnd)
 
     else:
@@ -44,18 +44,31 @@ def  add_friend() :
     return len(friends)
 
 
+def select_frnd() :
+    serial_no = 1
+    for frnd in friends:
+        print str(serial_no) + " " + frnd['name']
+        serial_no = serial_no + 1
+    user_selected_frnd = input("To whom you want to send the message? :")
+    user_index = friends[user_selected_frnd - 1]
+    return user_index
+
+
 def spy_chat(spy_name,spy_age,spy_rating): #function is created with name spy_chat
 
     current_status_message = None #initally there is no current status
     show_menu = True #menu will be displayed only when value is true
     while show_menu : #while loop to continuiously execute menu_choice
-        menu_choice = input("What would you like to do? \n 1. Add a Status \n 2.Add a Friend \n 0. Exit \n")#features which will be same for new and old user
+        menu_choice = input("What would you like to do? \n 1. Add a Status \n 2.Add a Friend \n 3. Send a message \n 0. Exit \n")#features which will be same for new and old user
         if menu_choice == 1:
             updated_status_message = add_status(current_status_message)
             print 'Your updated status is:' + updated_status_message
         elif menu_choice ==2:
            no_of_frnds = add_friend()
            print "I have" + " " + str(no_of_frnds) +" "+"friends"
+        elif menu_choice ==3:
+            selected_frnd= select_frnd()
+            print "we are going to send message to " + friends[select_frnd()]
         elif menu_choice ==0:
             show_menu = False #exits
         else:
