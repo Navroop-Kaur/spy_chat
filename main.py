@@ -1,8 +1,11 @@
 from spy_details import spy
+from steganography.steganography import Steganography
+from datetime import datetime
+
 print "Hello!" #welcome msgs for user
 print 'Let\'s get started.'
 STATUS_MESSAGES = ['Cant talk spychat only','Available','Always busy','At work','in a meeting']
-friends =[{'name':'raj','age':26,'rating':5.8,'is_online':True} ,{'name':'simran','age':36,'rating':6.8,'is_online':True}]
+friends =[{'name':'raj','age':26,'rating':5.8,'is_online':True,'chats':[]} ,{'name':'simran','age':36,'rating':6.8,'is_online':True},'chats':[]]
 
 
 
@@ -49,26 +52,52 @@ def select_frnd() :
     for frnd in friends:
         print str(serial_no) + " " + frnd['name']
         serial_no = serial_no + 1
-    user_selected_frnd = input("To whom you want to send the message? :")
+    user_selected_frnd = input("To whom you want to send or read the message? :")
     user_index = friends[user_selected_frnd - 1]
     return user_index
 
+def send_message():
+    selected_frnd = select_frnd()
+    message = raw_input("What is your secret message? ")
+    original_image = raw_input("What is the name of your image? ")
+    output_path = "output.png"
+    Steganography.encode(original_image,output_path,message)
+    new_chat = {
+        "message": message,
+        "time": datetime.now(),
+        "sent_by_me": True
+    }
+    friends[selected_frnd]['chats'].append(new_chat)
+    print "Message Encrypted"
+
+def read_message() :
+    choosen_frnd = select_frnd()
+    output_path = raw_input("Name of image to be decoded: ")
+    secret_text = Steganography.decode(output_path)
+    new_chat = {
+        "message": secret_text,
+        "time": datetime.now(),
+        "sent_by_me": False
+    }
+    friends[choosen_frnd]['chats'].append(new_chat)
+    print "Your secret message is " + secret_text
 
 def spy_chat(spy_name,spy_age,spy_rating): #function is created with name spy_chat
 
     current_status_message = None #initally there is no current status
     show_menu = True #menu will be displayed only when value is true
     while show_menu : #while loop to continuiously execute menu_choice
-        menu_choice = input("What would you like to do? \n 1. Add a Status \n 2.Add a Friend \n 3. Send a message \n 0. Exit \n")#features which will be same for new and old user
+        menu_choice = input("What would you like to do? \n 1. Add a Status \n 2.Add a Friend \n 3. Send a message \n 4. Read A Message \n 0. Exit \n")#features which will be same for new and old user
         if menu_choice == 1:
             updated_status_message = add_status(current_status_message)
             print 'Your updated status is:' + updated_status_message
-        elif menu_choice ==2:
+        elif menu_choice == 2:
            no_of_frnds = add_friend()
            print "I have" + " " + str(no_of_frnds) +" "+"friends"
-        elif menu_choice ==3:
-            selected_frnd= select_frnd()
-            print "we are going to send message to " + friends[select_frnd()]
+        elif menu_choice == 3:
+            send_message()
+        elif menu_choice == 4:
+            read_message()
         elif menu_choice ==0:
             show_menu = False #exits
         else:
